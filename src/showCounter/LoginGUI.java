@@ -32,6 +32,7 @@ import javax.swing.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 // import org.json.simple.parser.ParseException;
+import org.json.simple.parser.ParseException;
 
 // import netscape.javascript.JSObject;
 
@@ -301,60 +302,79 @@ public class LoginGUI implements ActionListener {
 		 frame.setVisible(true);
 	 }
 
+	// 1. get username and password entry from user via GUI.
+	// 2. use the username to search 'userCredentials' folder for username.json file
+	// 3. open the username.json file
+	// 4. obtain the username and password from .json file 
+
 	 /*
 		Effects: grabs the username and password from a .json file
 		Requires: the filepath to be obtained.
 	 */
-	 public void readFileForLogin() {
+
+
+	public String[] readFileForLogin(String filepath) throws IOException, ParseException {
 		 // initialize json parser object
-		 JSONParser parser = new JSONParser();
+		JSONParser parser = new JSONParser();
 		 
-		 try {
-			/*
-				TO DO:
-					1. On project run, create new folder called 'userCredentials' inside the project root directory if not already made.
-						Store user credentials there. 
-					2. Now instead of taking an arbitary filepath "C://Users//paulp//OneDrive...etc" we can prompt code to grab the current
-						users filepath to this directory and point it inside of the 'userCredentials' folder we made on app initialization.
-					3. This filepath ^ can be saved as a string and used as a variable inside of 
-						Object readFile = parser.parse(new FileReader(path-to-folder-variable)
-			*/
+		// parse the desired json file
+		Object readFile = parser.parse(new FileReader(filepath));
+		
+		JSONObject jsonObject = (JSONObject)readFile;
 
-			// parse the desired json file
-			Object readFile = parser.parse(new FileReader("C:\\Users\\paulp\\OneDrive\\Documents\\Data\\userCredentials\\Paul.json"));
-			
-			JSONObject jsonObject = (JSONObject)readFile;
+		usernames = (String)jsonObject.get("Username");
+		passwords = (String)jsonObject.get("Password");
+		
+		System.out.println("Username: " + usernames);
+		System.out.println("Password: " + passwords);
+		
+		String[] userInfo = {usernames, passwords};
 
-			usernames = (String)jsonObject.get("Username");
-			passwords = (String)jsonObject.get("Password");
-			System.out.println("Username: " + usernames);
-			System.out.println("Password: " + passwords);
-		} catch(Exception e) {
-			e.printStackTrace();
-	  }
-	 }
+		return userInfo;
+	} 
+	
 	public void actionPerformed(ActionEvent login) {
-	//Login method is here
+		
+		// grab their entered username and password
 		String user = userText.getText();
 		String pass = passText.getText();
+
+		// if user clicks login button 
 		if(login.getSource() == button) {
-			readFileForLogin();
-			//read line 318.
-		if(user.equals(usernames) && pass.equals(passwords)) {
-			System.out.println("Login Successful");
-			frame.dispose();
-		    stats();
-		  
+			// TO DO: create 'userCredentials' folder upon app initialization so this directory exists and the user doesnt 
+			// have to create it themselves.
+
+			// get current directory of user
+			// https://stackoverflow.com/questions/4871051/how-to-get-the-current-working-directory-in-java
+			String dir = System.getProperty("user.dir"); 
+
+			// get the file that the user belongs to
+			String userLoginInfo = dir + "/userCredentials/" + user + ".json";
+			System.out.println(userLoginInfo);
+			
+			try {
+				readFileForLogin(userLoginInfo);
+			} catch (IOException | ParseException e) {
+				e.printStackTrace();
+			}
+			
+			if (user.equals(usernames) && pass.equals(passwords)) {
+				System.out.println("Login Successful");
+				frame.dispose();
+				stats();
+			}
+
+			else {
+				success.setText("Login Failed");			
+			}
 		}
-		else {
-			success.setText("Login Failed");			
-		}
-		}
+
 		if(login.getSource() == newLogin) {
 			frame.dispose();
 			createAccount();
 			
-	}
+		}
+
 		if(login.getSource() == newLoginInfo) {
 			
 			String list[] = directoryPath.list();
