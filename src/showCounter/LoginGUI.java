@@ -8,33 +8,20 @@
 			5. share the repository link with me
 */
 
-
 package showCounter;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-// import java.io.BufferedReader;
-// import java.io.BufferedWriter;
 import java.io.File;
-// import java.io.FileNotFoundException;
-// import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-// import java.io.PrintWriter;
-// import java.nio.file.Files;
-// import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.*;
-
-// import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-// import org.json.simple.parser.ParseException;
 import org.json.simple.parser.ParseException;
-
-// import netscape.javascript.JSObject;
 
 public class LoginGUI implements ActionListener {
 	
@@ -80,13 +67,13 @@ public class LoginGUI implements ActionListener {
     private JButton goBack;
     private String usernames;
     private String passwords;
-    private File directoryPath = new File("C:\\Users\\paulp\\OneDrive\\Documents\\Data\\userCredentials\\");
-    private String directory = "C:\\Users\\paulp\\OneDrive\\Documents\\Data\\userCredentials\\";
+    private File directoryPath = new File(System.getProperty("user.dir") + "\\userCredentials");
 
 	public LoginGUI() {
 		
 	}
-	
+
+	//Creates GUI Frame
 	public void frame() {
 		
 		frame = new JFrame(); 
@@ -99,6 +86,7 @@ public class LoginGUI implements ActionListener {
 		
 	}
 	
+	//Creates Login Screen
 	public void Login() {
 		frame();
 		userLabel = new JLabel("Username: ");
@@ -134,6 +122,8 @@ public class LoginGUI implements ActionListener {
 		frame.setVisible(true);
 
 	}
+
+	//Creates Calculation Screen for returning statistics about a show
 	public void baseStats() {
 		
 		showName = new JLabel("Show Name: ");
@@ -160,7 +150,10 @@ public class LoginGUI implements ActionListener {
 		showAvgTime.setBounds(160, 140, 165, 25);
 		panel.add(showAvgTime);
 	}
-		public void stats() {
+
+	//Adds buttons enter display and calculate on the baseStats screen
+	//I may be able to combine this code into another method
+	public void stats() {
 		
 		frame();
 		baseStats();
@@ -182,139 +175,160 @@ public class LoginGUI implements ActionListener {
 		frame.setVisible(true);
 		
 	}
-		public void createAccount() {
-			
-			frame();
-			
-			userLabel = new JLabel("Username: ");
-			userLabel.setBounds(10, 20, 80, 25);
-			panel.add(userLabel);
-			
-			passLabel = new JLabel("Password: ");
-			passLabel.setBounds(10, 80, 80, 25);
-			panel.add(passLabel);
-			
-			passConf = new JLabel("Confirm Pass: ");
-			passConf.setBounds(10, 140, 90, 25);
-			panel.add(passConf);
-			
-			userCredentials = new JTextField();
-			userCredentials.setBounds(100, 20, 165, 25);
-			panel.add(userCredentials);
-			
-			passCredentials = new JPasswordField();
-			passCredentials.setBounds(100, 80, 165, 25);
-			panel.add(passCredentials);	
-			
-			userPassConf = new JPasswordField();
-			userPassConf.setBounds(100, 140, 165, 25);
-			panel.add(userPassConf);
-			
-			match = new JLabel(" ");
-			match.setBounds(10, 170, 150, 25);
-			panel.add(match);
-			
-			newLoginInfo = new JButton("Create Account");
-			newLoginInfo.setBounds(100, 200, 150, 25);
-			newLoginInfo.addActionListener(this);
-			panel.add(newLoginInfo);
-			
-			goBack = new JButton("Go Back");
-			goBack.setBounds(20, 270, 100, 25);
-			goBack.addActionListener(this);
-			panel.add(goBack);
-			
-			error = new JLabel("");
-			error.setBounds(280, 20, 150, 25);
-			panel.add(error);
-			
-			errorr = new JLabel("");
-			errorr.setBounds(280, 80, 150, 25);
-			panel.add(errorr);
-			
-			frame.setVisible(true);
-		}
-		public void createFile() throws IOException {
-			JSONObject user = new JSONObject ();
-			user.put("Username", userCredentials.getText());
-			user.put("Password", passCredentials.getText());		
-			String name = userCredentials.getText()+".json";				
-			String contents[] = directoryPath.list();
-			
-			for(int i = 0; i < contents.length; i++) {
-				
-				System.out.println(contents[i]);
-				
-				if(name.equals(contents[i])) {
-					System.out.println(contents[i]);
-					error.setText("Username already exists");
-					System.out.println("Error");
-					break;	
-				}
-			/*	if(userCredentials.getText().equals("")&&passCredentials.getText().equals("")) {
-					error.setText("Enter a username");
-					errorr.setText("Enter a password");
-					break;
-				}
-				if(userCredentials.getText().equals("")) {
-					error.setText("Enter a username");
-					break;
-				}
-				if(passCredentials.getText().equals("")) {
-					errorr.setText("Enter a password");
-					break;
-				}*/
-				
-				else{						
-						FileWriter File = new FileWriter(directory + name);
-						File.write(user.toJSONString());
-						File.close();
-						//frame.dispose();
-						//Login();
-						//DO NOT put a break statement here
-				}
-			}
 	
+	//Creates the screen needed for creating an account
+	public void createAccount() {
+			
+		frame();
+		
+		userLabel = new JLabel("Username: ");
+		userLabel.setBounds(10, 20, 80, 25);
+		panel.add(userLabel);
+		
+		passLabel = new JLabel("Password: ");
+		passLabel.setBounds(10, 80, 80, 25);
+		panel.add(passLabel);
+		
+		passConf = new JLabel("Confirm Pass: ");
+		passConf.setBounds(10, 140, 90, 25);
+		panel.add(passConf);
+		
+		userCredentials = new JTextField();
+		userCredentials.setBounds(100, 20, 165, 25);
+		panel.add(userCredentials);
+		
+		passCredentials = new JPasswordField();
+		passCredentials.setBounds(100, 80, 165, 25);
+		panel.add(passCredentials);	
+		
+		userPassConf = new JPasswordField();
+		userPassConf.setBounds(100, 140, 165, 25);
+		panel.add(userPassConf);
+		
+		match = new JLabel(" ");
+		match.setBounds(10, 170, 150, 25);
+		panel.add(match);
+		
+		newLoginInfo = new JButton("Create Account");
+		newLoginInfo.setBounds(100, 200, 150, 25);
+		newLoginInfo.addActionListener(this);
+		panel.add(newLoginInfo);
+		
+		goBack = new JButton("Go Back");
+		goBack.setBounds(20, 270, 100, 25);
+		goBack.addActionListener(this);
+		panel.add(goBack);
+		
+		error = new JLabel("");
+		error.setBounds(280, 20, 150, 25);
+		panel.add(error);
+		
+		errorr = new JLabel("");
+		errorr.setBounds(280, 80, 150, 25);
+		panel.add(errorr);
+		
+		frame.setVisible(true);
 	}
 
-	 public void calculate() {
-		 frame.dispose();
-		 frame();
-		 baseStats();
-		 execute = new JButton("Execute");
-		 execute.setBounds(160, 240, 100, 25);
-		 execute.addActionListener(this);
-		 panel.add(execute);
-		 
-		 timePerDay = new JLabel("Hours Watched/day: ");
-		 timePerDay.setBounds(20, 200, 150, 25);
-		 panel.add(timePerDay);
-			
-		 dailyTime = new JTextField();
-		 dailyTime.setBounds(160, 200, 165, 25);
-		 panel.add(dailyTime);
-		 
-		 back = new JButton("Go Back");
-		 back.setBounds(20, 270, 100, 25);
-		 back.addActionListener(this);
-		 panel.add(back);
-			
-		 frame.setVisible(true);
-	 }
+	//Creates a file containing username and pass and writes it to correct folder.
+	public void createFile() throws IOException {
 
-	// 1. get username and password entry from user via GUI.
-	// 2. use the username to search 'userCredentials' folder for username.json file
-	// 3. open the username.json file
-	// 4. obtain the username and password from .json file 
+		JSONObject user = new JSONObject ();
+		user.put("Username", userCredentials.getText());
+		user.put("Password", passCredentials.getText());		
+		String name = userCredentials.getText()+".json";				
+		String contents[] = directoryPath.list();
+		boolean a = true;
+
+		//Loops through userCredentials folder and checks if these are true or not
+		for (int i = 0; i < contents.length; i++) {
+
+			if (name.equals(contents[i])) {	
+
+				error.setText("Username already exists");
+				a = false;
+				break;
+
+			}		
+		}
+
+			if (userCredentials.getText().equals("")&&passCredentials.getText().equals("")) {
+
+				error.setText("Enter a username");
+				errorr.setText("Enter a password");
+				a = false; 
+
+			}
+
+			if (userCredentials.getText().equals("")) {
+
+				error.setText("Enter a username");	
+				a = false;
+
+			}
+
+			if (passCredentials.getText().equals("")) {
+
+				errorr.setText("Enter a password");
+				a = false;
+				
+			}
+
+			if (!passCredentials.getText().equals(userPassConf.getText())) {
+
+				match.setText("Passwords do not match");
+				a = false;
+
+			}
+			
+			if (a == true) {
+
+				String dir = System.getProperty("user.dir");
+				FileWriter File = new FileWriter(dir + "\\userCredentials\\" + name);
+				File.write(user.toJSONString());
+				File.close();
+				frame.dispose();
+				Login();
+
+			}
+
+	}
+
+	//creates a screen for calculations
+	public void calculate() {
+
+		frame.dispose();
+		frame();
+		baseStats();
+		execute = new JButton("Execute");
+		execute.setBounds(160, 240, 100, 25);
+		execute.addActionListener(this);
+		panel.add(execute);
+		
+		timePerDay = new JLabel("Hours Watched/day: ");
+		timePerDay.setBounds(20, 200, 150, 25);
+		panel.add(timePerDay);
+		
+		dailyTime = new JTextField();
+		dailyTime.setBounds(160, 200, 165, 25);
+		panel.add(dailyTime);
+		
+		back = new JButton("Go Back");
+		back.setBounds(20, 270, 100, 25);
+		back.addActionListener(this);
+		panel.add(back);
+		
+		frame.setVisible(true);
+	}
 
 	 /*
 		Effects: grabs the username and password from a .json file
 		Requires: the filepath to be obtained.
+		Returns: a string array containing the username and password.
 	 */
-
-
 	public String[] readFileForLogin(String filepath) throws IOException, ParseException {
-		 // initialize json parser object
+
+		// initialize json parser object
 		JSONParser parser = new JSONParser();
 		 
 		// parse the desired json file
@@ -322,25 +336,21 @@ public class LoginGUI implements ActionListener {
 		
 		JSONObject jsonObject = (JSONObject)readFile;
 
-		usernames = (String)jsonObject.get("Username");
-		passwords = (String)jsonObject.get("Password");
-		
-		System.out.println("Username: " + usernames);
-		System.out.println("Password: " + passwords);
-		
-		String[] userInfo = {usernames, passwords};
+		String[] userInfo = {(String)jsonObject.get("Username"), (String)jsonObject.get("Password")};
 
 		return userInfo;
+
 	} 
-	
+
+	//Performs actions of every JButton
 	public void actionPerformed(ActionEvent login) {
 		
-		// grab their entered username and password
+		//Grab their entered username and password
 		String user = userText.getText();
 		String pass = passText.getText();
 
-		// if user clicks login button 
-		if(login.getSource() == button) {
+		//If user clicks login button it will check and see if it is a valid login or not
+		if (login.getSource() == button) {
 			// TO DO: create 'userCredentials' folder upon app initialization so this directory exists and the user doesnt 
 			// have to create it themselves.
 
@@ -350,64 +360,58 @@ public class LoginGUI implements ActionListener {
 
 			// get the file that the user belongs to
 			String userLoginInfo = dir + "/userCredentials/" + user + ".json";
-			System.out.println(userLoginInfo);
 			
 			try {
-				readFileForLogin(userLoginInfo);
-			} catch (IOException | ParseException e) {
-				e.printStackTrace();
+
+				String[] userInfo = readFileForLogin(userLoginInfo);
+				usernames = userInfo[0];
+				passwords = userInfo[1];
+
+			} 
+
+			catch (IOException | ParseException e) {
+				e.printStackTrace();				
 			}
-			
+
 			if (user.equals(usernames) && pass.equals(passwords)) {
+
 				System.out.println("Login Successful");
 				frame.dispose();
 				stats();
+
 			}
 
 			else {
 				success.setText("Login Failed");			
 			}
 		}
+		//If user clicks the "Create Account" button on the login page,
+		//Open the create account page and dispose of other frame
+		if (login.getSource() == newLogin) {
 
-		if(login.getSource() == newLogin) {
 			frame.dispose();
-			createAccount();
-			
-		}
+			createAccount();	
 
-		if(login.getSource() == newLoginInfo) {
-			
-			String list[] = directoryPath.list();
-			
-			String name = userCredentials.getText()+".json";
-			for(int i = 0; i < list.length; i++) {				
-				if(name.equals(list[i])) {
-					System.out.println("Another error");
-					break;		
-				}
-				if(userCredentials.getText().equals("")) {
-					break;
-				}
-				if(passCredentials.getText().equals("")) {
-					break;
-				}
-				if(! userCredentials.getText().equals(passCredentials.getText())) {
-					match.setText("Passwords do not match");
-					System.out.println("Passwords do not match");
-				}
-				else {
-					//frame.dispose();
-				//	Login();
-					try {
-						createFile();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-				}
+		}
+		/*
+		If user clicks "Create Account" button the the Create Account page,
+		Creates a file as long as required conditions are met(that takes place in the 
+		createFile method)
+		*/
+		if (login.getSource() == newLoginInfo) {
+
+			try {				
+				createFile();
+				} 
+
+			catch (IOException e) {
+				e.printStackTrace();
 			}
-		}	
-		if(login.getSource() == Enter) {
+		}
+		
+		//If user clicks "Enter" on the stats page, it will store information typed
+		//Going to change this to a webscraper eventually
+		if (login.getSource() == Enter) {
 			
 			shows.add(showText.getText());
 			episodes = showNumOfEpisodes.getText();
@@ -423,11 +427,16 @@ public class LoginGUI implements ActionListener {
 			episodess = 0;
 
 		}
-		if(login.getSource() == Display) {
+
+		//If user clicks "Display" on the stats page, it will take info
+		//that was stored from the "Enter" button and return statistics
+		if (login.getSource() == Display) {
 			
 			System.out.println("Shows watched: " + shows);
-			for(numOfShows = 0; numOfShows < shows.size(); numOfShows++) {
+
+			for (numOfShows = 0; numOfShows < shows.size(); numOfShows++) {
 			}
+
 			System.out.println("Number of shows watched: " + numOfShows);
 			System.out.println("Number of episodes watched: " + Episode);
 			System.out.print("Total time spent: ");
@@ -437,10 +446,15 @@ public class LoginGUI implements ActionListener {
 			System.out.print(" days");
 			System.out.println();			
 		}
-		if(login.getSource() == calculate) {
+
+		//Pops up the calculate screen if user clicks "calculate"
+		if (login.getSource() == calculate) {
 			calculate();
 		}
-		if(login.getSource() == execute) {
+		
+		//If user clicks "Execute" on the calculate page it will return statistics
+		if (login.getSource() == execute) {
+
 			String episodes = showNumOfEpisodes.getText();
 			int episode = Integer.parseInt(episodes);
 			String times = showAvgTime.getText();
@@ -455,25 +469,27 @@ public class LoginGUI implements ActionListener {
 			showText.setText("");
 			showNumOfEpisodes.setText("");
 			showAvgTime.setText("");
-			dailyTime.setText("");
-			
+			dailyTime.setText("");	
+
 		}
-		if(login.getSource() == back) {
+
+		//Goes back to stats page from execute page
+		if (login.getSource() == back) {
+
 			frame.dispose();
 			stats();
+
 		}
-		if(login.getSource() == goBack) {
+		
+		//Goes back to login page from create account page
+		if (login.getSource() == goBack) {
+
 			frame.dispose();
 			Login();
-			
-		}
-}
-//Notes to self - Clear console, how to indent a list every few lines, maybe add avg time/show?
-	public static void main(String[] args) {
-		
-		LoginGUI login = new LoginGUI();
-		login.Login();
-		
-	}
 
+		}
+	}
+	//Notes to self - Clear console, how to indent a list every few lines, maybe add avg time/show?
 }
+
+
